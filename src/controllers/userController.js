@@ -54,7 +54,7 @@ export const createUser = async (req, res) => {
 export const confirmEmail = async (req, res) => {
   try {
     // Extract token from query parameters
-    const { simagle } = req.query;
+    const { token } = req.query;
 
     // Look up user's email and password using token
     const emailToken = await EmailToken.findOne({ token });
