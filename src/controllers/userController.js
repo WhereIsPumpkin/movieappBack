@@ -34,7 +34,7 @@ export const createUser = async (req, res) => {
     await new EmailToken({ token, email, password }).save();
 
     // Create confirmation URL
-    const confirmationUrl = `http://localhost:3000/confirm-email?token=${token}`;
+    const confirmationUrl = `${process.env.WEB_LINK}/confirm-email?token=${token}`;
 
     // Send email to user with confirmation URL
     await transporter.sendMail({
@@ -54,7 +54,7 @@ export const createUser = async (req, res) => {
 export const confirmEmail = async (req, res) => {
   try {
     // Extract token from query parameters
-    const { token } = req.query;
+    const { simagle } = req.query;
 
     // Look up user's email and password using token
     const emailToken = await EmailToken.findOne({ token });
