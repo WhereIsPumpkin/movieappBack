@@ -1,7 +1,11 @@
 import express from "express";
 import connect from "./database/mongo.js";
 import cors from "cors";
-import { createUser, confirmEmail } from "./controllers/userController.js";
+import {
+  createUser,
+  confirmEmail,
+  loginUser,
+} from "./controllers/userController.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -14,6 +18,7 @@ app.use(cors());
 
 app.post("/register", createUser);
 app.get("/confirm-email", confirmEmail);
+app.post("/login", loginUser);
 
 app.listen(3000, () => {
   console.log(`Example app listening on port 3000`);
