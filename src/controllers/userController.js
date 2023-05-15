@@ -20,12 +20,19 @@ export const createUser = async (req, res) => {
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
-
     if (existingUser) {
       return res
         .status(400)
         .json({ message: "A user with this email already exists" });
     }
+
+    const newUser = new User({
+      email,
+      password,
+      verified: false,
+    });
+
+    await newUser.save();
 
     // Generate unique token for user
     const token = crypto.randomBytes(20).toString("hex");
@@ -62,16 +69,11 @@ export const confirmEmail = async (req, res) => {
       return res.status(400).json({ message: "Invalid or expired token" });
     }
 
-    // Create new user in database
-    const newUser = new User({
-      email: emailToken.email,
-      password: emailToken.password,
-      id: uuidv4(),
-    });
-    await newUser.save();
-    console.log("New user created:", newUser);
+    await User.findOneAndUpdate(
+      { email: emailToken.email },
+      { verified: true }
+    );
 
-    // Delete email token from database
     await EmailToken.deleteOne({ token });
 
     res.send("Your email has been confirmed!");

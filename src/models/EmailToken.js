@@ -9,8 +9,8 @@ const emailTokenSchema = new Schema({
     type: Schema.Types.String,
     required: true,
   },
-  password: {
-    type: Schema.Types.String,
+  verified: {
+    type: Schema.Types.Boolean,
     required: true,
   },
 });
