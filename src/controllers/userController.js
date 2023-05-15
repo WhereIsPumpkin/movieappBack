@@ -38,7 +38,7 @@ export const createUser = async (req, res) => {
     const token = crypto.randomBytes(20).toString("hex");
 
     // Save token and user's email and password in database
-    await new EmailToken({ token, email, password }).save();
+    await new EmailToken({ token, email, verified: false }).save();
 
     // Create confirmation URL
     const confirmationUrl = `${process.env.WEB_LINK}/confirm-email?token=${token}`;
