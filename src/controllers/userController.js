@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import EmailToken from "../models/EmailToken.js";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
+import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import dotenv from "dotenv";
 
@@ -30,6 +31,7 @@ export const createUser = async (req, res) => {
       email,
       password,
       verified: false,
+      id: uuidv4(),
     });
 
     await newUser.save();
@@ -93,7 +95,14 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    res.status(200).json({ message: "Login successful" });
+    // Create a JWT for the user
+    const token = jwt.sign(
+      { email: existingUser.email, password: existingUser.password },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ message: "Error logging in user" });

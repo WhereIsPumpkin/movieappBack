@@ -1,3 +1,4 @@
+// In app.js
 import express from "express";
 import connect from "./database/mongo.js";
 import cors from "cors";
@@ -6,6 +7,7 @@ import {
   confirmEmail,
   loginUser,
 } from "./controllers/userController.js";
+import { authenticate } from "./middleware.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -19,7 +21,10 @@ app.use(cors());
 app.post("/register", createUser);
 app.get("/confirm-email", confirmEmail);
 app.post("/login", loginUser);
+app.get("/protected-route", authenticate, (req, res) => {
+  res.status(200).json({ message: "Successfully entered protected route" });
+});
 
-app.listen(3000, () => {
-  console.log(`Example app listening on port 3000`);
+app.listen(4444, () => {
+  console.log(`Example app listening on port 4444`);
 });
