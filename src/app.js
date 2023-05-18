@@ -7,6 +7,7 @@ import {
   confirmEmail,
   loginUser,
 } from "./controllers/userController.js";
+import { verifyToken } from "./controllers/tokenController.js";
 import { authenticate } from "./middleware.js";
 import dotenv from "dotenv";
 
@@ -24,6 +25,7 @@ app.post("/login", loginUser);
 app.get("/protected-route", authenticate, (req, res) => {
   res.status(200).json({ message: "Successfully entered protected route" });
 });
+app.get("/verify", verifyToken);
 
 app.listen(4444, () => {
   console.log(`Example app listening on port 4444`);
