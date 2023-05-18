@@ -8,7 +8,7 @@ export const verifyToken = (req, res) => {
       if (err) {
         return res.status(403).json({ valid: false });
       }
-      res.json({ valid: true });
+      res.json({ valid: true, user });
     });
   } else {
     res.status(401).json({ valid: false });
