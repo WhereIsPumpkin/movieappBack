@@ -25,7 +25,7 @@ app.post("/login", loginUser);
 app.get("/protected-route", authenticate, (req, res) => {
   res.status(200).json({ message: "Successfully entered protected route" });
 });
-app.get("/verify", verifyToken, (req, res) => {});
+app.get("/verify", verifyToken);
 
 app.listen(4444, () => {
   console.log(`Example app listening on port 4444`);

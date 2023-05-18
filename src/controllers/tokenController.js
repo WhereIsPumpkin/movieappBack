@@ -1,15 +1,15 @@
-import jwt from "jsonwebtoken";
+import jwtDecode from "jwt-decode";
 
 export const verifyToken = (req, res) => {
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-      if (err) {
-        return res.status(403).json({ valid: false });
-      }
-      res.json({ valid: true, user });
-    });
+    try {
+      const decoded = jwtDecode(token);
+      res.status(200).json({ valid: true, decoded });
+    } catch (err) {
+      res.status(401).json({ valid: false });
+    }
   } else {
     res.status(401).json({ valid: false });
   }
