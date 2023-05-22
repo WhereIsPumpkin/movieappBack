@@ -15,6 +15,9 @@ const userSchema = new Schema({
   verified: {
     type: Schema.Types.Boolean,
   },
+  avatar: {
+    type: Schema.Types.String,
+  },
 });
 
 const User = model("User", userSchema);

@@ -5,6 +5,7 @@ import nodemailer from "nodemailer";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import dotenv from "dotenv";
+import multer from "multer";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ let transporter = nodemailer.createTransport({
 export const createUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const file = req.file;
+    console.log(file);
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -27,11 +30,16 @@ export const createUser = async (req, res) => {
         .json({ message: "A user with this email already exists" });
     }
 
+    let avatarPath = file.path.replace(/^public[\\/]/, "");
+
+    avatarPath = "/" + avatarPath.replace(/\\/g, "/");
+
     const newUser = new User({
       email,
       password,
       verified: false,
       id: uuidv4(),
+      avatar: avatarPath,
     });
 
     await newUser.save();
@@ -97,7 +105,7 @@ export const loginUser = async (req, res) => {
 
     // Create a JWT for the user
     const token = jwt.sign(
-      { email: existingUser.email },
+      { email: existingUser.email, avatar: existingUser.avatar },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );

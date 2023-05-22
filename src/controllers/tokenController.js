@@ -1,9 +1,9 @@
 import jwtDecode from "jwt-decode";
 
 export const verifyToken = (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
+  const { token } = req.body;
+
+  if (token) {
     try {
       const decoded = jwtDecode(token);
       res.status(200).json({ valid: true, decoded });

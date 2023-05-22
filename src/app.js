@@ -11,6 +11,7 @@ import { verifyToken } from "./controllers/tokenController.js";
 import { authenticate } from "./middleware.js";
 import dotenv from "dotenv";
 import { getMovies } from "./controllers/movieController.js";
+import multer from "multer";
 
 dotenv.config();
 connect();
@@ -20,10 +21,35 @@ app.use(express.json());
 
 app.use(cors());
 
-app.post("/register", createUser);
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/avatars");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+app.post(
+  "/register",
+  multer({ storage: fileStorage, fileFilter }).single("avatar"),
+  createUser
+);
 app.get("/confirm-email", confirmEmail);
 app.post("/login", loginUser);
-app.get("/verify", verifyToken);
+app.post("/verify", verifyToken);
 app.get("/movies", getMovies);
 
 app.use("/", express.static("./public"));
