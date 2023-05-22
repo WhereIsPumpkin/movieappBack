@@ -129,16 +129,21 @@ export const bookmarkMovie = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    let newBookmarks;
     if (currentUser.bookmarks.includes(movieId)) {
-      return res.status(400).json({ message: "Movie already bookmarked" });
+      // Remove movieId from bookmarks
+      newBookmarks = currentUser.bookmarks.filter((id) => id !== movieId);
+    } else {
+      // Add movieId to bookmarks
+      newBookmarks = [...currentUser.bookmarks, movieId];
     }
 
     await User.findOneAndUpdate(
       { email: req.user.email },
-      { bookmarks: [...currentUser.bookmarks, movieId] }
+      { bookmarks: newBookmarks }
     );
 
-    res.status(200).json({ message: "Movie bookmarked successfully" });
+    res.status(200).json({ message: "Bookmarks updated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
