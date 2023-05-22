@@ -6,6 +6,7 @@ import {
   createUser,
   confirmEmail,
   loginUser,
+  bookmarkMovie,
 } from "./controllers/userController.js";
 import { verifyToken } from "./controllers/tokenController.js";
 import { authenticate } from "./middleware.js";
@@ -51,13 +52,10 @@ app.get("/confirm-email", confirmEmail);
 app.post("/login", loginUser);
 app.post("/verify", verifyToken);
 app.get("/movies", getMovies);
+app.put("/bookmark", authenticate, bookmarkMovie);
 
 app.use("/", express.static("./public"));
 
-// app.get("/protected-route", authenticate, (req, res) => {
-//   res.status(200).json({ message: "Successfully entered protected route" });
-// });
-
-app.listen(4444, () => {
-  console.log(`Example app listening on port 4444`);
+app.listen(5555, () => {
+  console.log(`Example app listening on port 5555`);
 });

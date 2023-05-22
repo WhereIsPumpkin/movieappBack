@@ -18,6 +18,9 @@ const userSchema = new Schema({
   avatar: {
     type: Schema.Types.String,
   },
+  bookmarks: {
+    type: Schema.Types.Array,
+  },
 });
 
 const User = model("User", userSchema);

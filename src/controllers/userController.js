@@ -21,7 +21,6 @@ export const createUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const file = req.file;
-    console.log(file);
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -114,5 +113,29 @@ export const loginUser = async (req, res) => {
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ message: "Error logging in user" });
+  }
+};
+
+export const bookmarkMovie = async (req, res) => {
+  try {
+    const { movieId } = req.body;
+    const currentUser = await User.findOne({ email: req.user.email });
+
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (currentUser.bookmarks.includes(movieId)) {
+      return res.status(400).json({ message: "Movie already bookmarked" });
+    }
+
+    await User.findOneAndUpdate(
+      { email: req.user.email },
+      { bookmarks: [...currentUser.bookmarks, movieId] }
+    );
+
+    res.status(200).json({ message: "Movie bookmarked successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
