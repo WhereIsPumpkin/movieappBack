@@ -107,7 +107,6 @@ export const loginUser = async (req, res) => {
       {
         email: existingUser.email,
         avatar: existingUser.avatar,
-        bookmarks: existingUser.bookmarks,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
