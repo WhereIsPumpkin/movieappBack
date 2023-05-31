@@ -57,7 +57,15 @@ export const createUser = async (req, res) => {
       from: "youremail@gmail.com",
       to: email,
       subject: "Please confirm your email",
-      text: `Please click on this link to confirm your email: ${confirmationUrl}`,
+      html: `
+        <div style="font-family: sans-serif;">
+          <h1 style="font-size: 18px;">Please confirm your email</h1>
+          <p style="font-size: 16px;">
+            Thank you for signing up! Please click on the link below to confirm your email and activate your account:
+          </p>
+          <a href="${confirmationUrl}" style="font-size: 16px; color: blue;">Confirm Email</a>
+        </div>
+      `,
     });
 
     res.status(201).json({ message: "Please confirm your email" });
