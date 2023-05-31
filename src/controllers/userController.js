@@ -93,7 +93,14 @@ export const confirmEmail = async (req, res) => {
 
     await EmailToken.deleteOne({ token });
 
-    res.send("Your email has been confirmed!");
+    res.send(`
+      <div style="font-family: sans-serif;">
+        <h1 style="font-size: 18px;">Your email has been confirmed!</h1>
+        <p style="font-size: 16px;">
+          Thank you for verifying your email. Your account is now activated and you can log in to access all features.
+        </p>
+      </div>
+    `);
   } catch (error) {
     console.error("Error confirming email:", error);
     res.status(500).json({ message: "Error confirming email" });
